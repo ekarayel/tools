@@ -1,0 +1,5 @@
+#!/bin/bash 
+THIS=`dirname "$0"`
+
+$THIS/lastpass/build
+$THIS/base/build

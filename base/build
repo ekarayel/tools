@@ -4,11 +4,13 @@ THIS=`dirname "$0"`
 CID=$(docker run --rm -d tools:lastpass sleep infinity)
 
 docker exec -it $CID lpass login me@eminkarayel.de
-PK_KEY=$(docker exec -it $CID lpass show --field='Private Key' 1567500572899439597)
+GPG_KEY=$(docker exec -it $CID lpass show --field='Private Key' 1567500572899439597)
+SSH_KEY=$(docker exec -it $CID lpass show --field='Private Key' 1059377306872469281)
 docker kill $CID
 
 docker build $THIS \
-        --build-arg PK_KEY="$PK_KEY" \
+        --build-arg GPG_KEY="$GPG_KEY" \
+        --build-arg SSH_KEY="$SSH_KEY" \
         --build-arg GROUP_ID=$(id -g $USER) \
         --build-arg USER_ID=$(id -u $USER) \
         -t tools:base

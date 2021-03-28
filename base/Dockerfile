@@ -6,7 +6,8 @@ ENV LC_ALL=C
 
 ARG GROUP_ID
 ARG USER_ID
-ARG PK_KEY
+ARG GPG_KEY
+ARG SSH_KEY
 
 RUN groupadd --gid ${GROUP_ID} appgroup
 RUN useradd -m --gid ${GROUP_ID} --uid ${GROUP_ID} appuser
@@ -37,8 +38,9 @@ RUN echo "view.fontsize=14" > ~/.isabelle/Isabelle2021/jedit/properties
 
 RUN git config --global user.email "me@eminkarayel.de"
 RUN git config --global user.name "Emin Karayel"
-RUN echo "$PK_KEY\n" | gpg --import
 
+RUN echo "$GPG_KEY\n" | gpg --import
+RUN eval "$(ssh-agent)" && echo "$SSH_KEY" | tr -d '\r' | ssh-add -
 RUN stack ghc -- -e "1+1"
 
 RUN mkdir /home/appuser/workdir
